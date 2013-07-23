@@ -1,0 +1,36 @@
+apply plugin:'java'
+
+repositories{
+    mavenCentral()
+}
+
+ext {
+    bouncycastleVersion = '1.49'
+    examples = [
+        'BcSignedDataExample',
+        'JcaBasicCRMFExample',
+        'JcaPKCS10Example',
+        'JcaSignedDataExample',
+        'JcaTwoPhaseCRMFExample',
+        'JcePKCS12Example'
+    ]
+}
+
+dependencies{
+    compile (
+        'org.bouncycastle:bcprov-jdk15on:'  + bouncycastleVersion,
+        'org.bouncycastle:bcprov-ext-jdk15on:' + bouncycastleVersion,
+        'org.bouncycastle:bcpkix-jdk15on:' + bouncycastleVersion,
+        'org.bouncycastle:bcmail-jdk15on:' + bouncycastleVersion,
+        'org.bouncycastle:bcpg-jdk15on:' + bouncycastleVersion
+    )
+}
+
+ext.examples.each { example ->
+    task "run$example"(type: JavaExec) {
+        description = "Runs the $example example program"
+
+        classpath(project.sourceSets.main.runtimeClasspath)
+        main("cwguide.$example")
+    }
+}
